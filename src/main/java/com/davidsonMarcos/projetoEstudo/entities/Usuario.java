@@ -2,11 +2,20 @@ package com.davidsonMarcos.projetoEstudo.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id; /*Sempre importar o javax.persistence.Entity e não o org.hibernate.annotarion.Enity. Estamos fazendo 
+a classe depender da especificação e não da implementação*/
+
+@Entity
 public class Usuario implements Serializable {
 
 
 	private static final long serialVersionUID = 1L;
 	
+	@Id /*Falando que meu atributo id vai ser minha chave primaria*/
+	@GeneratedValue(strategy = GenerationType.IDENTITY) /*Falando que meu atributo id vai ser auto Imcrement*/
 	private Long id;
 	private String nome;
 	private String email;
