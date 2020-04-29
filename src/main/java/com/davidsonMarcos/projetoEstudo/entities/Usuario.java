@@ -1,12 +1,17 @@
 package com.davidsonMarcos.projetoEstudo.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id; /*Sempre importar o javax.persistence.Entity e não o org.hibernate.annotarion.Enity. Estamos fazendo 
-a classe depender da especificação e não da implementação*/
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore; /*Sempre importar o javax.persistence.Entity e não o org.hibernate.annotarion.Enity. Estamos fazendo 
+a classe depender da especificação e não da implementação.*/
 
 @Entity
 public class Usuario implements Serializable {
@@ -21,6 +26,15 @@ public class Usuario implements Serializable {
 	private String email;
 	private String telefone;
 	private String password;
+	
+	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um pedido, impedir o cliente (usuario) fique chamando o servico (Ordem) e o servico chamando o cliente infinitamente (Loop). Pode ser colocado em qualquer lado da relação
+	Quando vc têm uma associação muitos para um, se vc carregar um obj do lados do muitos, o obj do lado do um vêm automaticamente, mas isso não acontece se vc carregar um obj do lado do um. Por isso estamos usando o @JsonIgnore do lado do muitos*/
+	@OneToMany (mappedBy = "cliente")/*Estou dizendo para o jpa que o Cliente (Usuario) tem uma relação um para muitos com servico (Ordem). mappedBy informa que está mapeado com o atributo cliente quando relacionmos Ordem com Usuario na classe Ordem*/
+	private List<Ordem> ordens = new ArrayList<>(); /*Relacionando o meu usuario com o servico (ordem). Um usuario pode ter varios servicos,
+	por isso usamos um list. A lista de pedidos do usuario é uma coleção, por isso coloquei "= new ArrayList<>()". Temos também que acrescentar 
+	o metodo get. Como é uma coleção, não implementamos o metodo set*/
+	
+	
 	
 	public Usuario () {}
 
@@ -72,6 +86,10 @@ public class Usuario implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public List<Ordem> getOrdens() {
+		return ordens;
+	}
 
 	@Override
 	public int hashCode() {
@@ -97,6 +115,8 @@ public class Usuario implements Serializable {
 			return false;
 		return true;
 	}
+
+
 	
 	
 	
