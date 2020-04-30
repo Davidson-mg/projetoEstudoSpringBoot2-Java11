@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
 
 @Entity
+/*@Table (name = "tb_Ordem") usamos essa anotação quando um nome de uma classe têm um mesmo nome de alguma palavra reservada do BD. Como estamos dando nomes em pt, não têm necessidade */
 public class Ordem implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -26,7 +27,7 @@ public class Ordem implements Serializable{
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT") /*Garantindo que o meu instant seja mostrado no Json no formato de string do ISO 8601*/
 	private Instant momento;
 	
-	private Integer ordemStatus; /*atributo referente a classe Enum que possui os status do pedido. Repare que ele é do tipo Integer por conda do BD, mas o 
+	private Integer ordemStatus; /*atributo referente a classe Enum que possui os status do pedido. Repare que ele é do tipo Integer por conta do BD, mas o 
 	construtor dele é do tipo OrdemStatus. Por conta disso, no metodo get a baixo vamos ter que converter o valor inteiro para OrdemStatus e no metodo set vamos
 	converter de OrdemStatus para o valor inteiro. Além disso, no cosntrutor, ao inves de usar o this que usamos normalmente, vamos usar o metodo set no lugar.*/
 	
