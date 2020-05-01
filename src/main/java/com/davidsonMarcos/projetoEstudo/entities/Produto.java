@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
 
 @Entity
 /*@Table (name = "tb_Produto") usamos essa anotação quando um nome de uma classe têm um mesmo nome de alguma palavra reservada do BD. Como estamos dando nomes em pt, não têm necessidade */
@@ -24,7 +27,15 @@ public class Produto implements Serializable {
 	private Double preco;
 	private String imgUrl;
 	
-	@Transient /*serve para impedir que o compilador tente interpretar. coloquei essa anotação se não da erro. Essa questão do relacionamento usando o Set ainda vou tratar no proximo commit*/
+	@ManyToMany
+	@JoinTable(name = "Produto_categoria", 
+	joinColumns = @JoinColumn (name = "fk_produtoId"), 
+	inverseJoinColumns = @JoinColumn (name = "fk_CategoriaId"))/*A anotão @JoinTable me permitir colocar alguns atributos. Nela estou
+	criando em "name" uma tabela auxiliar (Aquela que é criada numa relação muitos para muitos no BD). Em joinColumns estou criando uma chave estrangeira da tabela produto,
+	e em inverseJoinColumns a chave estrangeira da outra tabela do relacionamento (Categoria). Se eu tivesse criando a tabela auxiliar na classe Categoria, 
+	seria ao contrario, "joinColumns" teria "fk_CategoriaId" e inverseJoinColumns teria fk_produtoId. Além disso, na classe Categoria devemos colocar uma referencia para este mapeamento
+	também no atributo Set que relaciona as duas classes (tabelas)*/
+	
 	private Set<Categoria> categorias = new HashSet<>(); /*Neste caso estou usando um set ao inves de um List. Estamos fazendo isso pq o Set representa um conjunto,
 	e temos que garantir que não vamos ter um produto com mais de uma ocorrencia da mesma categoria. Estamos instanciando usando HashSet pq o Set é uma interface e não
 	pode ser instanciado, semelhamente quando usamos o List e instanciamos com o ArrayList. Instanciamos para garantir que a coleção não inicie nula.Produto têm 

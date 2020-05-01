@@ -53,6 +53,17 @@ public class TesteConfig implements CommandLineRunner {
 		
 		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
+		p1.getCategorias().add(cat2); /*Depois de criar a table auxiliar que faz o relacionamento muitos para muitos entre produto e categoria na classe produto, 
+		estamos associando o obj p1 que é um produto, ao obj cat2, que é a categoria do produto.*/
+		p2.getCategorias().add(cat1);
+		p2.getCategorias().add(cat3);
+		p3.getCategorias().add(cat3);
+		p4.getCategorias().add(cat3);
+		p5.getCategorias().add(cat2);
+		
+		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5)); /*salvando novamente só que agora com as associações que realizamos acima*/
+		
+		
 		Usuario u1 = new Usuario(null, "Maria Brown", "maria@gmail.com", "988888888", "123456"); 
 		Usuario u2 = new Usuario(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
 		

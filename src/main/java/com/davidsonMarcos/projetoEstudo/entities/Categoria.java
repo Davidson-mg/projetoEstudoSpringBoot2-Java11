@@ -8,7 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 /*@Table (name = "tb_categoria") usamos essa anotação quando um nome de uma classe têm um mesmo nome de alguma palavra reservada do BD. Como estamos dando nomes em pt, não têm necessidade */
@@ -21,7 +25,8 @@ public class Categoria implements Serializable{
 	private Long id;
 	private String nome;
 	
-	@Transient /*serve para impedir que o compilador tente interpretar*/
+	@JsonIgnore
+	@ManyToMany(mappedBy = "categorias") /*É uma referecia para o mapeamento que é feito lá na classe Produto na anotação @JoinTable também no atributo Set que relaciona as duas classes*/
 	private Set<Produto> produtos = new HashSet<>(); /*Neste caso estou usando um set ao inves de um List. Estamos fazendo isso pq o Set representa um conjunto,
 	e temos que garantir que não vamos ter uma categoria com mais de uma ocorrencia do mesmo produto. Estamos instanciando usando HashSet pq o Set é uma interface e não
 	pode ser instanciado, semelhamente quando usamos o List e instanciamos com o ArrayList. Instanciamos para garantir que a coleção não inicie nula. Produto têm 
