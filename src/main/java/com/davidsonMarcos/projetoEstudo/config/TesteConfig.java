@@ -11,10 +11,12 @@ import org.springframework.context.annotation.Profile;
 
 import com.davidsonMarcos.projetoEstudo.entities.Categoria;
 import com.davidsonMarcos.projetoEstudo.entities.Ordem;
+import com.davidsonMarcos.projetoEstudo.entities.Produto;
 import com.davidsonMarcos.projetoEstudo.entities.Usuario;
 import com.davidsonMarcos.projetoEstudo.entities.enums.OrdemStatus;
 import com.davidsonMarcos.projetoEstudo.repositorios.CategoriaRepositorio;
 import com.davidsonMarcos.projetoEstudo.repositorios.OrdemRepositorio;
+import com.davidsonMarcos.projetoEstudo.repositorios.ProdutoRepositorio;
 import com.davidsonMarcos.projetoEstudo.repositorios.UsuarioRepositorio;
 
 @Configuration /*Classe de configuração é uma classe auxiliar que vai fazer algumas configurações na aplicação. É preciso informar com o @Configuration*/
@@ -29,6 +31,9 @@ public class TesteConfig implements CommandLineRunner {
 	
 	@Autowired
 	private CategoriaRepositorio categoriaRepositorio;
+	
+	@Autowired
+	private ProdutoRepositorio produtoRepositorio;
 
 	@Override
 	public void run(String... args) throws Exception { /*Tudo que estiver neste metodo vai ser executado quando a aplicação for executada.
@@ -38,7 +43,15 @@ public class TesteConfig implements CommandLineRunner {
 		Categoria cat2 = new Categoria(null, "Livros"); 
 		Categoria cat3 = new Categoria(null, "Computadores");
 		
+		Produto p1 = new Produto(null, "O Senhor dos aneis", "Frodo precisa destruir o anel.", 90.5, ""); 
+		Produto p2 = new Produto(null, "Smart TV", "Tv com alta resolução. Não assista BBB pois é coisa de idiota.", 2190.0, ""); 
+		Produto p3 = new Produto(null, "Macbook Pro", "Computador do Steve jobs que não roda jogos e varias aplicações.", 1250.0, "");
+		Produto p4 = new Produto(null, "PC Gamer", "PC que roda tudo no maximo mas não roda The last of us, God of war, Uncharted, entre outros.", 6000.0, ""); 
+		Produto p5 = new Produto(null, "O minimos que você precisa saber para não ser um idiota", "Coletânea de 193 artigos e ensaios escritos entre 1997 e 2013.", 100.99, ""); 
+		
 		categoriaRepositorio.saveAll(Arrays.asList(cat1, cat2, cat3));
+		
+		produtoRepositorio.saveAll(Arrays.asList(p1, p2, p3, p4, p5));
 		
 		Usuario u1 = new Usuario(null, "Maria Brown", "maria@gmail.com", "988888888", "123456"); 
 		Usuario u2 = new Usuario(null, "Alex Green", "alex@gmail.com", "977777777", "123456");

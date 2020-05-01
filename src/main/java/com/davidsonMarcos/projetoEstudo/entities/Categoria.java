@@ -1,11 +1,14 @@
 package com.davidsonMarcos.projetoEstudo.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 /*@Table (name = "tb_categoria") usamos essa anotação quando um nome de uma classe têm um mesmo nome de alguma palavra reservada do BD. Como estamos dando nomes em pt, não têm necessidade */
@@ -17,6 +20,13 @@ public class Categoria implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
+	
+	@Transient /*serve para impedir que o compilador tente interpretar*/
+	private Set<Produto> produtos = new HashSet<>(); /*Neste caso estou usando um set ao inves de um List. Estamos fazendo isso pq o Set representa um conjunto,
+	e temos que garantir que não vamos ter uma categoria com mais de uma ocorrencia do mesmo produto. Estamos instanciando usando HashSet pq o Set é uma interface e não
+	pode ser instanciado, semelhamente quando usamos o List e instanciamos com o ArrayList. Instanciamos para garantir que a coleção não inicie nula. Produto têm 
+	uma relação muitos para muitos com categoria, então o mesmo foi feito na classe Produto. Obs: no caso de coleções criamos apenas o metodo get e não o set. 
+	Além disso, não a inserimos no construtor pois já está sendo instaciado*/
 	
 	public Categoria () {}
 
@@ -40,6 +50,10 @@ public class Categoria implements Serializable{
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+	
+	public Set<Produto> getProdutos() {
+		return produtos;
 	}
 
 	@Override
@@ -66,7 +80,5 @@ public class Categoria implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
 	
 }
