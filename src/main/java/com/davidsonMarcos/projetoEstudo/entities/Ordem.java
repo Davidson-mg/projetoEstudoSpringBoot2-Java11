@@ -2,6 +2,8 @@ package com.davidsonMarcos.projetoEstudo.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.davidsonMarcos.projetoEstudo.entities.enums.OrdemStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -35,6 +38,14 @@ public class Ordem implements Serializable{
 	@JoinColumn(name = "fk_clienteId") /*Estou criando uma chave estrangeira da classe Usuario dentro da classe Ordem*/
 	private Usuario cliente; /*Relacionado meu servico (Ordem) com meu cliente (Usuario). Um servico pode ter apenas um usuario, por isso
 	não usamos uma lista.*/
+	
+	@OneToMany (mappedBy = "id.ordem")/*Estou dizendo para o jpa que a Ordem (servico) tem uma relação um para muitos com ProdutoOrdem. mappedBy informa que está 
+	mapeado com o atributo id quando relacionmos Ordem com Produto na classe Ordem. Inserimos "id.ordem" pq na classe ProdutoOrdem temos o id que por sua vez tem a ordem (pedido/serviço)*/
+	private Set<ProdutoOrdem> itens = new HashSet(); /*Neste caso estou usando um set ao inves de um List. Estamos fazendo isso pq o Set representa um conjunto,
+	e temos que garantir que não vamos ter um ProdutoOrdem com mais de uma ocorrencia da mesma categoria. Estamos instanciando usando HashSet pq o Set é uma interface 
+	e não pode ser instanciado, semelhamente quando usamos o List e instanciamos com o ArrayList. Instanciamos para garantir que a coleção não inicie nula.Ordem têm 
+	uma relação muitos para um com ProdutoOrdem, então devemos ir na classe ProdutoOrdem e inserir a anotação @OneToMany no atributo do Id. Obs: no caso de coleções 
+	criamos apenas o metodo get e não o set. Além disso, não a inserimos no construtor pois já está sendo instaciado*/
 	
 	public Ordem () {}
 	
@@ -82,6 +93,11 @@ public class Ordem implements Serializable{
 		this.cliente = cliente;
 	}
 	
+	public Set<ProdutoOrdem> getItens () {
+		
+		return itens;
+		
+	}
 
 	@Override
 	public int hashCode() {

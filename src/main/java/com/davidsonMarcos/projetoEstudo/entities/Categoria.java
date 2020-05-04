@@ -25,7 +25,7 @@ public class Categoria implements Serializable{
 	private Long id;
 	private String nome;
 	
-	@JsonIgnore
+	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um pedido, impedir o cliente (usuario) fique chamando o servico (Ordem) e o servico chamando o cliente infinitamente (Loop). Pode ser colocado em qualquer lado da relação*/
 	@ManyToMany(mappedBy = "categorias") /*É uma referecia para o mapeamento que é feito lá na classe Produto na anotação @JoinTable também no atributo Set que relaciona as duas classes*/
 	private Set<Produto> produtos = new HashSet<>(); /*Neste caso estou usando um set ao inves de um List. Estamos fazendo isso pq o Set representa um conjunto,
 	e temos que garantir que não vamos ter uma categoria com mais de uma ocorrencia do mesmo produto. Estamos instanciando usando HashSet pq o Set é uma interface e não

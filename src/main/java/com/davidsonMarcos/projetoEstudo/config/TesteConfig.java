@@ -12,10 +12,12 @@ import org.springframework.context.annotation.Profile;
 import com.davidsonMarcos.projetoEstudo.entities.Categoria;
 import com.davidsonMarcos.projetoEstudo.entities.Ordem;
 import com.davidsonMarcos.projetoEstudo.entities.Produto;
+import com.davidsonMarcos.projetoEstudo.entities.ProdutoOrdem;
 import com.davidsonMarcos.projetoEstudo.entities.Usuario;
 import com.davidsonMarcos.projetoEstudo.entities.enums.OrdemStatus;
 import com.davidsonMarcos.projetoEstudo.repositorios.CategoriaRepositorio;
 import com.davidsonMarcos.projetoEstudo.repositorios.OrdemRepositorio;
+import com.davidsonMarcos.projetoEstudo.repositorios.ProdutoOrdemRepositorio;
 import com.davidsonMarcos.projetoEstudo.repositorios.ProdutoRepositorio;
 import com.davidsonMarcos.projetoEstudo.repositorios.UsuarioRepositorio;
 
@@ -34,6 +36,9 @@ public class TesteConfig implements CommandLineRunner {
 	
 	@Autowired
 	private ProdutoRepositorio produtoRepositorio;
+	
+	@Autowired
+	private ProdutoOrdemRepositorio produtoOrdemRepositorio;
 
 	@Override
 	public void run(String... args) throws Exception { /*Tudo que estiver neste metodo vai ser executado quando a aplicação for executada.
@@ -75,6 +80,14 @@ public class TesteConfig implements CommandLineRunner {
 		metodo saveAll que passa uma lista Arrays.asList e dentro dela os dois objetos que criamos acima*/
 		
 		ordemRepositorio.saveAll(Arrays.asList(o1, o2, o3));
+		
+		ProdutoOrdem po1 = new ProdutoOrdem(o1, p1, 2, p1.getPreco()); /*Repare que estamos passando como paramentro um pedido 1 (o1), produto 1 (p1), quantidade (2), e preco estamos reproduzindo o precço do p1*/
+		ProdutoOrdem po2 = new ProdutoOrdem(o1, p3, 1, p3.getPreco()); 
+		ProdutoOrdem po3 = new ProdutoOrdem(o2, p3, 2, p3.getPreco()); 
+		ProdutoOrdem po4 = new ProdutoOrdem(o3, p5, 2, p5.getPreco());
+		
+		produtoOrdemRepositorio.saveAll(Arrays.asList(po1, po2, po3, po4));
+		
 	}
 	
 }
