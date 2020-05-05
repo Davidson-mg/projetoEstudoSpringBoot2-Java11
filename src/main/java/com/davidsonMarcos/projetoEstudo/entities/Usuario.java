@@ -27,8 +27,9 @@ public class Usuario implements Serializable {
 	private String telefone;
 	private String password;
 	
-	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um pedido, impedir o cliente (usuario) fique chamando o servico (Ordem) e o servico chamando o cliente infinitamente (Loop). Pode ser colocado em qualquer lado da relação
-	Quando vc têm uma associação muitos para um, se vc carregar um obj do lados do muitos, o obj do lado do um vêm automaticamente, mas isso não acontece se vc carregar um obj do lado do um. Por isso estamos usando o @JsonIgnore do lado do muitos*/
+	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um pedido, impedir o cliente (usuario) fique chamando o servico (Ordem) e o 
+	servico chamando o cliente infinitamente (Loop). Pode ser colocado em qualquer lado da relação. Quando vc têm uma associação muitos para um, se vc carregar um obj 
+	do lados do muitos, o obj do lado do um vêm automaticamente, mas isso não acontece se vc carregar um obj do lado do um. Por isso estamos usando o @JsonIgnore do lado do muitos*/
 	@OneToMany (mappedBy = "cliente")/*Estou dizendo para o jpa que o Cliente (Usuario) tem uma relação um para muitos com servico (Ordem). mappedBy informa que está mapeado com o atributo cliente quando relacionmos Ordem com Usuario na classe Ordem*/
 	private List<Ordem> ordens = new ArrayList<>(); /*Relacionando o meu usuario com o servico (ordem). Um usuario pode ter varios servicos,
 	por isso usamos um list. A lista de pedidos do usuario é uma coleção, por isso coloquei "= new ArrayList<>()". Temos também que acrescentar 

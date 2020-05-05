@@ -40,12 +40,14 @@ public class Ordem implements Serializable{
 	não usamos uma lista.*/
 	
 	@OneToMany (mappedBy = "id.ordem")/*Estou dizendo para o jpa que a Ordem (servico) tem uma relação um para muitos com ProdutoOrdem. mappedBy informa que está 
-	mapeado com o atributo id quando relacionmos Ordem com Produto na classe Ordem. Inserimos "id.ordem" pq na classe ProdutoOrdem temos o id que por sua vez tem a ordem (pedido/serviço)*/
+	mapeado com o atributo id quando relacionmos Ordem com Produto na classe Ordem. Inserimos "id.ordem" pq na classe ProdutoOrdem temos o id que por sua vez tem a ordem (pedido/serviço)
+	"id.ordem" pq na classe ProdutoOrdem temos o id que por sua vez tem o produto. O ".ordem" deve se igual ao nome da variavel ordem na classe OrdemItemPk no pacote pkComposta*/
 	private Set<ProdutoOrdem> itens = new HashSet(); /*Neste caso estou usando um set ao inves de um List. Estamos fazendo isso pq o Set representa um conjunto,
 	e temos que garantir que não vamos ter um ProdutoOrdem com mais de uma ocorrencia da mesma categoria. Estamos instanciando usando HashSet pq o Set é uma interface 
 	e não pode ser instanciado, semelhamente quando usamos o List e instanciamos com o ArrayList. Instanciamos para garantir que a coleção não inicie nula.Ordem têm 
 	uma relação muitos para um com ProdutoOrdem, então devemos ir na classe ProdutoOrdem e inserir a anotação @OneToMany no atributo do Id. Obs: no caso de coleções 
-	criamos apenas o metodo get e não o set. Além disso, não a inserimos no construtor pois já está sendo instaciado*/
+	criamos apenas o metodo get e não o set. Além disso, não a inserimos no construtor pois já está sendo instaciado. A classe (tabela) Produto têm uma relação 
+	muitos para muitos com Ordem, por isso, no BD é gerada a tabela auxiliar. Neste caso, a tebela auxiliar é a ProdutoOrdem*/
 	
 	public Ordem () {}
 	

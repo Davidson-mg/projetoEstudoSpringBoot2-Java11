@@ -6,6 +6,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
 import com.davidsonMarcos.projetoEstudo.entities.pkComposta.OrdemItemPk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class ProdutoOrdem implements Serializable{
@@ -36,6 +37,13 @@ public class ProdutoOrdem implements Serializable{
 		this.preco = preco;
 	}
 	
+	/*Os metodos get e set das classes Ordem e Produto abaixo estão relacionados coma a relação muitos para muitos entre as classes Produto e Ordem*/
+	
+	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um ProdutoOrdem, impedir o cliente (usuario) fique chamando o ProdutoOrdem e o 
+	ProdutoOrdem chamando o cliente infinitamente (Loop). Pode ser colocado em qualquer lado da relação. Quando vc têm uma associação muitos para um, se vc carregar um obj 
+	do lados do muitos, o obj do lado do um vêm automaticamente, mas isso não acontece se vc carregar um obj do lado do um. Por isso estamos usando o @JsonIgnore do lado do muitos.
+	Além disso, neste caso estamos usando o @JsonIgnore no metodo get ao inves do atributo, a exemplo do que foi feito na classe Usuario. Isso pq não temos um atributo
+	Ordem diretamente, e sim um atributo id que chama uma ordem (servico) ou produto.*/
 	public Ordem getOrdem () { /*Apesar de não termos diretamente os atributos Ordem e Produto acima, devemos criar os metodos get e set para ambos. Isso pq para o que
 	é externo a classe, a minha classe ProdutoOrdem não vai retornar um getId com a chave composta pelas duas classes que estão se relacionadndo (Produto e Ordem).
 	Ela deve retornar Ordem e Produto separadamente, um de cada vez */

@@ -10,7 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -30,7 +34,7 @@ public class Produto implements Serializable {
 	@ManyToMany
 	@JoinTable(name = "Produto_categoria", 
 	joinColumns = @JoinColumn (name = "fk_produtoId"), 
-	inverseJoinColumns = @JoinColumn (name = "fk_CategoriaId"))/*A anotão @JoinTable me permitir colocar alguns atributos. Nela estou
+	inverseJoinColumns = @JoinColumn (name = "fk_CategoriaId"))/*A anotação @JoinTable me permitir colocar alguns atributos. Nela estou
 	criando em "name" uma tabela auxiliar (Aquela que é criada numa relação muitos para muitos no BD). Em joinColumns estou criando uma chave estrangeira da tabela produto,
 	e em inverseJoinColumns a chave estrangeira da outra tabela do relacionamento (Categoria). Se eu tivesse criando a tabela auxiliar na classe Categoria, 
 	seria ao contrario, "joinColumns" teria "fk_CategoriaId" e inverseJoinColumns teria fk_produtoId. Além disso, na classe Categoria devemos colocar uma referencia para este mapeamento
@@ -41,6 +45,12 @@ public class Produto implements Serializable {
 	pode ser instanciado, semelhamente quando usamos o List e instanciamos com o ArrayList. Instanciamos para garantir que a coleção não inicie nula.Produto têm 
 	uma relação muitos para muitos com categoria, então o mesmo foi feito na classe Categoria. Obs: no caso de coleções criamos apenas o metodo get e não o set.
 	Além disso, não a inserimos no construtor pois já está sendo instaciado*/
+	
+	@OneToMany(mappedBy = "id.produto") /*Estou dizendo para o jpa que Produto tem uma relação um para muitos com ProdutoOrdem. mappedBy informa que está 
+	mapeado com o atributo id quando relacionmos Ordem com Produto na classe Ordem. Inserimos "id.produto" pq na classe ProdutoOrdem temos o id que por sua vez tem o produto.
+	O ".produto" deve se igual ao nome da variavel Produto na classe OrdemItemPk no pacote pkComposta*/
+	private Set<ProdutoOrdem> itens = new HashSet<>(); /*A classe (tabela) Produto têm uma relação muitos para muitos com Ordem, por isso, no BD é gerada a tabela 
+	auxiliar. Neste caso, a tebela auxiliar é a ProdutoOrdem. Vamos ter que criar o metodo get (getOrdens) criado abaixo*/
 	
 	public Produto() {}
 	
@@ -93,6 +103,27 @@ public class Produto implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+	
+	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um ProdutoOrdem, impedir o cliente (usuario) fique chamando o ProdutoOrdem e o 
+	ProdutoOrdem chamando o cliente infinitamente (Loop). Pode ser colocado em qualquer lado da relação. Quando vc têm uma associação muitos para um, se vc carregar um obj 
+	do lados do muitos, o obj do lado do um vêm automaticamente, mas isso não acontece se vc carregar um obj do lado do um. Por isso estamos usando o @JsonIgnore do lado do muitos.
+	Além disso, neste caso estamos usando o @JsonIgnore no metodo get ao inves do atributo, a exemplo do que foi feito na classe Usuario. Isso pq não temos um atributo
+	Ordem diretamente, e sim um atributo id que chama um Produto.*/
+	public Set<Ordem> getOrdens (){ /*Este metodo está relacionado a relação muitos pra muitos entre as classes Produto e Ordem. Para cara produto que têm mais 
+	de um produtoOrdem (tabela auxiliar), devemos percorrer a coleção de ProdutoOrdem, e para cada ProdutoOrdem devemos pegar a Ordem (pedido) relacionado a ele*/
+		
+		Set<Ordem> set = new HashSet<>();
+		
+		for (ProdutoOrdem x : itens) {
+			
+			set.add(x.getOrdem());
+			
+		}
+		
+		return set;
+		
+	}  
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
