@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Pagamento implements Serializable{
 
@@ -23,6 +25,9 @@ public class Pagamento implements Serializable{
 	/*A classe (tabela) Pagamento têm uma relação uma para um com a classe Ordem (pedido), onde a classe Pagamento é dependente e a classe Ordem é independente.
 	Isso pq nós podemos ter um padido (ordem) sem nenhum pagamento*/
 	
+	@JsonIgnore /*Essa anotação serve para quando eu executar minha aplicação e chamar um pedido, impedir o cliente (usuario) fique chamando o servico (Ordem) e o 
+	servico chamando o pagamento infinitamente (Loop). Pode ser colocado em qualquer lado da relação. Quando vc têm uma associação muitos para um, se vc carregar um obj 
+	do lados do muitos, o obj do lado do um vêm automaticamente, mas isso não acontece se vc carregar um obj do lado do um. Por isso estamos usando o @JsonIgnore do lado do muitos*/
 	@OneToOne /*Dizendo que a classe Ordem têm relação um para um com Pagamento*/
 	@MapsId /*É necessario colocar essa anotação no atributo de associação na classe dependente*/
 	private Ordem ordem;

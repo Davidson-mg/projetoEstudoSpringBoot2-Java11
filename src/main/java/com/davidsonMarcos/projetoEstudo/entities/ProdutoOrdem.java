@@ -86,6 +86,12 @@ public class ProdutoOrdem implements Serializable{
 		this.preco = preco;
 	}
 
+	public Double getSubTotal(){ /*Colocamos o nome de get pq é padrão do java EE*/
+		
+		return preco * quantidade;
+		
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

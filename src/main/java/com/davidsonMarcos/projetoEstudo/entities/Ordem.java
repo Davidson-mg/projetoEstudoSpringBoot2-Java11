@@ -119,6 +119,19 @@ public class Ordem implements Serializable{
 		return itens;
 		
 	}
+	
+	public Double getTotal () {
+		
+		double soma = 0;
+		
+		for (ProdutoOrdem x : itens) {
+			
+			soma = soma + x.getSubTotal();
+			
+		}
+		
+		return soma;
+	}
 
 	@Override
 	public int hashCode() {
