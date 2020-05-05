@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.davidsonMarcos.projetoEstudo.entities.Categoria;
 import com.davidsonMarcos.projetoEstudo.entities.Ordem;
+import com.davidsonMarcos.projetoEstudo.entities.Pagamento;
 import com.davidsonMarcos.projetoEstudo.entities.Produto;
 import com.davidsonMarcos.projetoEstudo.entities.ProdutoOrdem;
 import com.davidsonMarcos.projetoEstudo.entities.Usuario;
@@ -88,6 +89,17 @@ public class TesteConfig implements CommandLineRunner {
 		
 		produtoOrdemRepositorio.saveAll(Arrays.asList(po1, po2, po3, po4));
 		
+		
+		/*A classe (tabela) Pagamento têm uma relação uma para um com a classe Ordem (pedido), onde a classe Pagamento é dependente e a classe Ordem é independente.
+		Isso pq nós podemos ter um padido (ordem) sem nenhum pagamento. Repare abaixo que para salvar um obj que é dependente de outro numa relação uma para um
+		nós não chamamos o repositorio do proprio obj conforme feito nos exemplos acima. Basta instanciar o obj dependente passando o obj independente no argumento
+		conforme o construtor, e logo depois chamar o metodo set do obj independente passando o obj dependente como argumento e por fim, chamar o repositorio da 
+		classe Ordem com o metodo "save" passando o obj ordem novamente. O jpa faz o resto*/
+		
+		Pagamento pagamento1 = new Pagamento (null, Instant.parse("2019-06-20T21:53:07Z"), o1);
+		o1.setPagamento(pagamento1);
+		
+		ordemRepositorio.save(o1);
 	}
 	
 }

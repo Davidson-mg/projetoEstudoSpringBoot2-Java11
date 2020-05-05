@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.davidsonMarcos.projetoEstudo.entities.enums.OrdemStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -48,6 +50,14 @@ public class Ordem implements Serializable{
 	uma relação muitos para um com ProdutoOrdem, então devemos ir na classe ProdutoOrdem e inserir a anotação @OneToMany no atributo do Id. Obs: no caso de coleções 
 	criamos apenas o metodo get e não o set. Além disso, não a inserimos no construtor pois já está sendo instaciado. A classe (tabela) Produto têm uma relação 
 	muitos para muitos com Ordem, por isso, no BD é gerada a tabela auxiliar. Neste caso, a tebela auxiliar é a ProdutoOrdem*/
+	
+	/*A classe (tabela) Pagamento têm uma relação uma para um com a classe Ordem (pedido), onde a classe Pagamento é dependente e a classe Ordem é independente.
+	Isso pq nós podemos ter um padido (ordem) sem nenhum pagamento*/
+	
+	@OneToOne (mappedBy = "ordem", cascade = CascadeType.ALL) /*Estou dizendo para o jpa que a Ordem (servico) tem uma relação um para um com Pagamento. mappedBy 
+	informa que está mapeado com o atributo ordem quando relacionmos Ordem com Pagamento na classe Pagamento. No caso relacionamentos um para um tb é necessario usar
+	o "cascade". Ele mapea as duas entidades que estão se relacionado para ter o mesmo id, ou seja, se o pedido tiver codigo 5, o pagamento também deve ter codigo 5*/
+	private Pagamento pagamento;
 	
 	public Ordem () {}
 	
@@ -95,6 +105,15 @@ public class Ordem implements Serializable{
 		this.cliente = cliente;
 	}
 	
+	
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
 	public Set<ProdutoOrdem> getItens () {
 		
 		return itens;
