@@ -31,4 +31,10 @@ public class UsuarioServico {
 		
 	}
 	
+	public Usuario insert (Usuario obj) { /*Vai inserir um novo usuario*/
+		
+		return repositorio.save(obj);
+		
+	}
+	
 }
