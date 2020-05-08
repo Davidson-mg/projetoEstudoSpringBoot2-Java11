@@ -37,4 +37,10 @@ public class UsuarioServico {
 		
 	}
 	
+	public void delete (Long id) {
+		
+		repositorio.deleteById(id);
+		
+	}
+	
 }

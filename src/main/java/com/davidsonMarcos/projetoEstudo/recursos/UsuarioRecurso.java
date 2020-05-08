@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -56,7 +57,7 @@ public class UsuarioRecurso {
 		
 	}
 	
-	/*Pra realizar um teste de inserção usando o postman, do lado da URL deve selecionar a opção "POST, em seguida ir na aba "Body" e marcar aopção "row".
+	/*Pra realizar um teste de inserção usando o postman, do lado da URL deve selecionar a opção "POST", em seguida ir na aba "Body" e marcar aopção "row".
 	  Na URL vc dever colocar o final "/usuario" após o 8080". É necessario também selecionar a opção JSON na barra de opções e verificar na aba "Headers" se a
 	  opção "content-type" está marcada. Por fim, basta inserir na aba body conforme o exemplo abaixo 
 	  
@@ -68,6 +69,22 @@ public class UsuarioRecurso {
 	  }
 	  
 	  */
+	
+	
+	@DeleteMapping (value = "/{id}") /*se vai deletar por id então precisa passar o id*/
+	public ResponseEntity<Void> delete (@PathVariable Long id){ /*@PathVariable serve para o spring aceitar o parametro (neste caso id) como parametro na url*/
+		
+		servico.delete(id);
+		return ResponseEntity.noContent().build(); /*Em caso de delete a resposta não têm corpo, por isso usamos o metodo noContent que retorna uma resposta vazia.
+		O codigo http de uma resposta vazia é 204 e o metodo noContent já vai tratar isso.*/
+		
+		/*OBS: se neste ponto se eu tentar excluir um usuario associado a um pedido, vai retornar exceção de integridade do banco de dados. Vamos tratar isso nos
+		proximos commits. Neste momento podemos excluir somente usuarios que não têm pedidos*/
+		
+	}
+	
+	/*Para realizar um teste de exlusão usando o postman, do lado da URL deve selecionar a opção "DELETE" e na url inserir o caminho com o id no final e clicar em Sand.
+	 * ex: http://localhost:8080/usuarios/3 */
 	
 }
 
