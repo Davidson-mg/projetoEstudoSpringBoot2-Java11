@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.davidsonMarcos.projetoEstudo.repositorios.UsuarioRepositorio;
-
+import com.davidsonMarcos.projetoEstudo.servicos.exceptions.ResourceNotFoundException;
 import com.davidsonMarcos.projetoEstudo.entities.Usuario;
 
 @Service /*Essa anotação serve para que a classe possa ser usada nas injeções de dependecia do spring usando o @Autowired. Existem outras 
@@ -27,7 +27,8 @@ public class UsuarioServico {
 	public Usuario findById (Long id) {
 		
 		Optional<Usuario> obj = repositorio.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException (id)); /*Nós trocamos o ".get" por "orElseThrow". Quer dizer que ele vai tentar dar um get, se o usuario não existir,, 
+		ele vai lançar a exceção personalizada do pacote .servicos.exceptions*/
 		
 	}
 	
