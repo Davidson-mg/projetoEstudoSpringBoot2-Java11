@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -85,6 +86,30 @@ public class UsuarioRecurso {
 	
 	/*Para realizar um teste de exlusão usando o postman, do lado da URL deve selecionar a opção "DELETE" e na url inserir o caminho com o id no final e clicar em Sand.
 	 * ex: http://localhost:8080/usuarios/3 */
+	
+	
+	@PutMapping (value = "/{id}") /*se vai atualizar por id então precisa passar o id*/
+	public ResponseEntity <Usuario> update (@PathVariable Long id, @RequestBody Usuario obj){ /*@PathVariable serve para o spring aceitar o parametro 
+	(neste caso id) como parametro na url. Essa anotação @RequestBody serve pra dizer que o obj vai chegar no modo jSon ao fazer requisição
+	e ser desserializado para o obj Usuario. Metodo para inserir um novo usuario*/
+		
+		obj = servico.update(id, obj); /*Atualizando o meu Usuario*/
+		return ResponseEntity.ok().body(obj);
+		
+	}
+	
+	/*Para realizar um teste de atualização de usuario usando o postman, do lado da URL deve selecionar a opção "PUT", em seguida ir na aba "Body" e marcar aopção "row".
+	  Na URL vc dever colocar o final "/usuario/1" (id do usario que deseja modificar) após o 8080". É necessario também selecionar a opção JSON na barra de 
+	  opções e verificar na aba "Headers" se a opção "content-type" está marcada. Por fim, basta inserir na aba body conforme o exemplo abaixo 
+	  
+	  {     
+	  "nome": "Bob Brown",     
+	  "email": "bob@gmail.com",     
+	  "phone": "977557755",     
+	  "password": "123456" 
+	  }
+	  
+	  */
 	
 }
 

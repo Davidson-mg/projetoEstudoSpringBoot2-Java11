@@ -43,4 +43,23 @@ public class UsuarioServico {
 		
 	}
 	
+	public Usuario update (Long id, Usuario obj) { /*Vai retornar o usuario atualizado. Vai receber o id pra indicar qual usuario vai atualizar e um Usuario com os dados dele*/
+		
+		Usuario entidade = repositorio.getOne(id); /*O getOne não vai no BD ainda, ele pega o obj monitorado pelo jpa pra gente poder trabalhar com ele e em seguida 
+		efetuar alguma alteração no BD. É melhor do que o findById pq vai direto no Banco de Dados. */
+		atualizarDados (entidade, obj); /*Esse metodo atualiza os dados da minha entidade baseado nos dados que chegaram no meu obj*/
+		return repositorio.save(entidade); /*Depois disso nós salvamos no nosso banco de dados*/
+		
+	}
+
+	private void atualizarDados(Usuario entidade, Usuario obj) {
+		
+		entidade.setNome(obj.getNome()); /*Atualizando os dados da entidade com base no que chegou no obj*/
+		entidade.setEmail(obj.getEmail());
+		entidade.setTelefone(obj.getTelefone());
+		
+		/*Repare que não atualizamos o id e nem a senha.*/
+		
+	}
+	
 }
