@@ -3,6 +3,8 @@ package com.davidsonMarcos.projetoEstudo.servicos;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -62,10 +64,22 @@ public class UsuarioServico {
 	
 	public Usuario update (Long id, Usuario obj) { /*Vai retornar o usuario atualizado. Vai receber o id pra indicar qual usuario vai atualizar e um Usuario com os dados dele*/
 		
-		Usuario entidade = repositorio.getOne(id); /*O getOne não vai no BD ainda, ele pega o obj monitorado pelo jpa pra gente poder trabalhar com ele e em seguida 
-		efetuar alguma alteração no BD. É melhor do que o findById pq vai direto no Banco de Dados. */
-		atualizarDados (entidade, obj); /*Esse metodo atualiza os dados da minha entidade baseado nos dados que chegaram no meu obj*/
-		return repositorio.save(entidade); /*Depois disso nós salvamos no nosso banco de dados*/
+		try {
+			
+			Usuario entidade = repositorio.getOne(id); /*O getOne não vai no BD ainda, ele pega o obj monitorado pelo jpa pra gente poder trabalhar com ele e em seguida 
+			efetuar alguma alteração no BD. É melhor do que o findById pq vai direto no Banco de Dados. */
+			atualizarDados (entidade, obj); /*Esse metodo atualiza os dados da minha entidade baseado nos dados que chegaram no meu obj*/
+			return repositorio.save(entidade); /*Depois disso nós salvamos no nosso banco de dados*/
+			
+		}catch(EntityNotFoundException e) { /*Caso o usuario tente deletar um id que não existe, para que não retorne um erro 500, e seja tratado pela nossa exceção 
+			personalizada ResourceNotFoundException. Antes de usar o EmptyResultDataAccessException, eu fiz um teste com a exceção RumtimeException (que é generica) e entre chaves 
+			e.printStackTrace() e dessa vez com o throw new ResourceNotFoundException(id); é necessario retornar algo ou gerar a exceção. Em seguida rodei o programa e selecionei 
+			um id inexistente. Eu fiz isso para saber qual era a exceção pra esse tipo de caso, que é a EmptyResultDataAccessException.*/
+				
+			throw new ResourceNotFoundException(id);
+			
+		}
+			
 		
 	}
 
