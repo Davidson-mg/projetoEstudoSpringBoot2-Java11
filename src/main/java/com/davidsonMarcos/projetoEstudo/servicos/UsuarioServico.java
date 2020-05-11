@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.davidsonMarcos.projetoEstudo.repositorios.UsuarioRepositorio;
+import com.davidsonMarcos.projetoEstudo.servicos.exceptions.DatabaseException;
 import com.davidsonMarcos.projetoEstudo.servicos.exceptions.ResourceNotFoundException;
 import com.davidsonMarcos.projetoEstudo.entities.Usuario;
 
@@ -39,9 +42,22 @@ public class UsuarioServico {
 	}
 	
 	public void delete (Long id) {
-		
-		repositorio.deleteById(id);
-		
+		try {
+			
+			repositorio.deleteById(id);
+			
+		}catch (EmptyResultDataAccessException e) { /*Caso o usuario tente deletar um id que não existe, para que não retorne um erro 500, e seja tratado pela nossa exceção 
+		personalizada ResourceNotFoundException. Antes de usar o EmptyResultDataAccessException, eu fiz um teste com a exceção RumtimeException (que é generica) e entre chaves 
+		e.printStackTrace(). Em seguida rodei o programa e selecionei um id inexistente. Eu fiz isso para saber qual era a exceção pra esse tipo de caso, que é a 
+		EmptyResultDataAccessException. A mesma coisa foi feita no catch abaixo*/
+			
+			throw new ResourceNotFoundException(id); /*Lanaçando minha exceção personalizada que trata o erro de excluir um usuario não existente*/
+			
+		}catch (DataIntegrityViolationException e) {
+			
+			throw new DatabaseException(e.getMessage()); /*Lanaçando minha exceção personalizada que trata o erro de excluir um usuario associado a um serço (Ordem)*/
+			
+		}	
 	}
 	
 	public Usuario update (Long id, Usuario obj) { /*Vai retornar o usuario atualizado. Vai receber o id pra indicar qual usuario vai atualizar e um Usuario com os dados dele*/
